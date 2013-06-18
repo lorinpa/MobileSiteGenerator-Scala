@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<project name="scala mobile site generator  Build Script" default="init" basedir=".">
+
+    <property environment="env" />
+    <property name="build.compiler.emacs" value="true" />
+    <property name="classpath" value="${env.CLASSPATH}"/>
+    <property name="src.dir" value="${basedir}/src"/>
+    <property name="dist.dir" value="${basedir}/dist"/>
+    <property name="docs.dir" value="${basedir}/docs"/>
+    <property name="build.classes.dir" value="${basedir}/classes"/>
+    <property name="scala.home" value="${env.SCALA_HOME}"/>
+    <property name="project.name" value="mobileSiteGen"/>
+    <property name="scala-library-jar" value="${scala.home}/lib/scala-library.jar"/>
+
+    <path id="project.class.path">
+        <pathelement location="${build.classes.dir}"/>
+        <fileset dir="${scala.home}/lib"> <include name="*.jar" /> </fileset>
+    </path>
+
+    <path id="apache.commons.io.path">
+        <pathelement location="${basedir}/lib/commons-io-2.4.jar"/>
+    </path>
+
+     <target name="compile-scala" depends="init">
+        <mkdir dir="${build.classes.dir}"/>
+            <scalac srcdir="${src.dir}" destdir="${build.classes.dir}"  classpathref="project.class.path" force="changed">
+                <include name="**/*.scala"/>
+                <classpath refid="project.class.path"/>
+                <classpath refid="apache.commons.io.path"/>
+            </scalac>
+    </target>
+
+     <target name="make-jar" depends="compile-scala">
+            <delete file="${dist.dir}/${project.name}.jar"/>
+            <jar destfile="${dist.dir}/${project.name}.jar">
+                <fileset dir="${build.classes.dir}"  excludes="**/Test.class"/>
+                <manifest>
+                    <attribute name="Class-Path" value="lib/scala-library.jar lib/commons-io-2.4.jar"/>
+                    <attribute name="Main-Class" value="com.pa.process.MobileSiteGen"/>
+                </manifest>
+            </jar>
+
+     </target>
+
+     <target name="make-dist" depends="make-jar">
+            <copy todir="${dist.dir}/lib">
+                 <fileset dir="${basedir}/lib"/>
+             </copy>
+             <copy file="${scala-library-jar}" todir="${dist.dir}/lib"/>
+            <copy todir="${dist.dir}/static-content">
+                 <fileset dir="${basedir}/static-content"/>
+            </copy>
+     </target>
+
+
+     <target name="docs" depends="init">
+         <mkdir dir="${docs.dir}"   />
+        <scaladoc srcdir="${src.dir}" destdir="${docs.dir}"
+          deprecation="yes" unchecked="yes" 
+          doctitle="Mobile Site Generator">
+            <classpath refid="project.class.path"/>
+            <classpath refid="apache.commons.io.path"/>
+            <include name="com/pa/process/*.scala"  />
+        </scaladoc>
+  </target>
+
+    <target name="init" >
+        <echo message="Project Name=${project.name}" />
+        <echo message="Using Source directory=${src.dir}" />
+        <echo message="Jar file built in =${dist.dir}" />
+        <echo message="ant make-jar to compile and build jar" />
+        <echo message="ant make-dist to build distribution " />
+
+        <echo message="Scala home: ${scala.home} " />
+        <echo message="Scala lib = ${scala-library-jar} " />
+        <taskdef resource="scala/tools/ant/antlib.xml">
+            <classpath>
+            <pathelement location="${scala.home}/lib/scala-reflect.jar" />
+            <pathelement location="${scala.home}/lib/scala-compiler.jar"   />
+            <pathelement location="${scala-library-jar}"   />
+          </classpath>
+        </taskdef>
+    </target>
+
+</project>
