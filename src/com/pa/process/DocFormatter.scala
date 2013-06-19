@@ -2,6 +2,19 @@ package com.pa.process
 
 import scala.xml.Unparsed
 
+
+/** DocFormatter creates an HTML document.
+  *
+  * @constructor Creates a new instance of DocFormatter 
+  *
+  * @param docNode A DocNode instance which contains the document fragments parsed from 
+  * the website's rss feed.
+  * @param linkText The text (description) of a link located at the documents top section. 
+  * Typically links to either the website index.html (table of contents) or a "about me" page.
+  * @param href The url portion of the link located at the the document top section. Corresponding
+  * url to "linkText"
+  * 
+  */
 class DocFormatter(docNode: DocNode,linkText: String, href: String) {
 
   val style = """<style>
@@ -80,7 +93,11 @@ class DocFormatter(docNode: DocNode,linkText: String, href: String) {
             </script>"""
   
   val docType = "<!DOCTYPE html>"
-  
+  /** This method performs the bulk of the html document creation process. 
+   * 
+   *  @param homeLinks Sets whether a link to sites index.html (table of contents) is included
+   *  in the html document.
+   */
   def format(homeLinks: Boolean  ) = { 
     val output = 
       <html>

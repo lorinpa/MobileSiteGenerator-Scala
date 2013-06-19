@@ -25,7 +25,7 @@ class DocNodeListHandler extends DefaultHandler  {
   val docNodeList = ListBuffer[DocNode]()
   var start = false 
   var node: DocNode = null
-  val  buffer:StringBuilder = new StringBuilder()
+  val buffer:StringBuilder = new StringBuilder()
     
   override def startElement(namespaceURI: String, localName: String ,  qName:String , atts: Attributes ) = {
     buffer.setLength(0);

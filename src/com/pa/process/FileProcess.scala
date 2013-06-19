@@ -6,9 +6,18 @@ import java.io.IOException
 import java.io.OutputStreamWriter
 import org.apache.commons.io.FileUtils
 
-
+/** FileProcess is a thin Scala wrapper around the Apache Commons IO Java Library.
+ *
+ */
 class FileProcess {
-
+  /** Copies a set of files, subdirectories and subdirectory contents 
+   *  from the soure locattion represented by srcParentDir, to the location
+   *  represented by destDir.
+   *
+   *  @param srcParentDir represents the location we are copying from.
+   *  @param destDir represnets the location we are copyiny to.
+   *
+   */
   def copySet(srcParentDir :String, destDir: String) =  {
     val srcDir = new File(srcParentDir)
     var elem: File = null
@@ -28,7 +37,11 @@ class FileProcess {
       }
     }
   }
- 
+  /** Copies an individual file.
+   *   
+   *   @param src represents the file being copied.
+   *   @param dest represents the detination location.
+   */
   def copyFile(src: String, dest: String ) =  {
     try {
       val srcDir = new File(src)
@@ -39,6 +52,11 @@ class FileProcess {
     }
   }
 
+  /** Copies an individual directory and all of it's child contents.
+   *
+   *  @param src represents the location of the directory we are copying.
+   *  @param dest represents the location we are copying to.
+   */
   def copyDir(src: String, dest: String) = {
     val srcDir  = new File(src)
     val destDir = new File(dest)
@@ -48,7 +66,11 @@ class FileProcess {
       case ex: IOException => println(ex.getMessage())
     }
   }
-
+  /** Creates a new file and writes content to the new file.
+   *  @param fileName the location and name of the file we are writing.
+   *  @param doc represents the content we are writing to the new file.
+   *
+   */
   def writeFile(fileName: String, doc: String) {
     var fos: FileOutputStream = null
     var out: OutputStreamWriter = null
@@ -63,7 +85,10 @@ class FileProcess {
       fos = null
     }
   }
-  
+  /** Creates a new directory if it doesn't already exist.
+   *  @param subDir represents the name and location of the directory we are either 
+   *  creating or checking it's existance.
+   */
   def createDir(subDir: String) =  {     
     val  file = new File(subDir)
     if (!file.exists()) {
