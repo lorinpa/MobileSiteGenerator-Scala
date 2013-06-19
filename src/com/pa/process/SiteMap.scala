@@ -2,11 +2,17 @@ package com.pa.process
 import scala.xml.XML
 import scala.collection.mutable._
 
+/** SiteMap constructs a xml document used by search engines like
+ *  Google to index our website artivles.
+ *
+ */
 class SiteMap {
+
+  val baseAddr = "http://public-action.org/mob"
 
   def writeOutputFile(fileName: String, items: ListBuffer[DocNode]) = {
     val locationPrefix = "http://public-action.org/mob/doc-"
-    val baseAddr = "http://public-action.org/mob"
+
     val index = -1
     val priority = 0.5
     val changefreq = "daily"
@@ -37,16 +43,27 @@ class SiteMap {
       case ex: Exception => ("An error occured " + ex.getMessage() )
     }
   }
-
+  /** Generates full link as required by the Site Map xml schema.
+   *  Note we need to add our base address, we can not use relative
+   *  URLs here. We need a full url.
+   *
+   */
   def fullLink(link: String) = {
-    link + ".html"
+    baseAddr + "/"+ link + ".html"
   }
 
+  /** Reformats the article published date from the RSS format
+   *  to a yyyy-mm-dd
+   *  @return a reformatted date
+   */
   def convertDate(inDate: String) : String = {
     val split = inDate.split(" ")
     split(3) + "-" + convertMonth(split(2)) + "-" + split(1)
   }
-
+  /** Converts a text representation of a month to a 
+   *  numberic representation.
+   *
+   */
   def convertMonth(monthStr: String) : String = {
     monthStr match {
       case "Jan" => "01"

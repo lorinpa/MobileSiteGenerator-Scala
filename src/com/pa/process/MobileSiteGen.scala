@@ -64,7 +64,7 @@ object MobileSiteGen {
       fileProcess.writeFile(targetDir+ "/"+ indexDoc.link,  new DocFormatter(indexDoc,"AA-side","a-side.html").format(false))
       // write out the search engine site map file
       val siteMap = new SiteMap
-      siteMap.writeOutputFile(targetDir+ "/siteMap.xml", list)
+      siteMap.writeOutputFile(targetDir+ "/sitemap.xml", list)
       // add static (pre-composed) content
       val srcDir = cwd + "/static-content";
       fileProcess.copySet(srcDir, outputDir);
